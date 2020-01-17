@@ -12,8 +12,8 @@ public class Config {
     static {
         URL url = null;
         try {
-//            url = new URL("https://go.udacity.com/xyz-reader-json" );
-            url = new URL("http://120.77.95.13/xyz-reader-json.json" );
+            url = new URL("https://go.udacity.com/xyz-reader-json" );
+//            url = new URL("http://120.77.95.13/xyz-reader-json.json" );
 
         } catch (MalformedURLException ignored) {
             // TODO: throw a real error
