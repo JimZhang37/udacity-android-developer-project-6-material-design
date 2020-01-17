@@ -169,7 +169,11 @@ public class ArticleDetailActivity extends ActionBarActivity
         @Override
         public Fragment getItem(int position) {
             mCursor.moveToPosition(position);
-            return ArticleDetailFragment.newInstance(mCursor.getLong(ArticleLoader.Query._ID));
+//            Fragment f = ArticleDetailFragment.newInstance(mCursor.getLong(ArticleLoader.Query._ID));
+            Fragment f = ArticleDetailbFragment.newInstance("a", "b");
+            return f;
+//            return ArticleDetailbFragment.newInstance("a", "b");
+
         }
 
         @Override
