@@ -57,11 +57,11 @@ public class ArticleDetailActivity extends ActionBarActivity
         ActionBar ab = getSupportActionBar();
         ab.setTitle("Detail Page");
         // Enable the Up button
-        //ab.setDisplayHomeAsUpEnabled(true);
+        ab.setDisplayHomeAsUpEnabled(true);
 
         getLoaderManager().initLoader(0, null, this);
 //add new line
-        ((CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar)).setTitle("ABC");
+//        ((CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar)).setTitle("ABC");
         // my_child_toolbar is defined in the layout file
 //        Toolbar myChildToolbar = (Toolbar) findViewById(R.id.my_child_toolbar);
 //        myChildToolbar.setTitle("detail page");
