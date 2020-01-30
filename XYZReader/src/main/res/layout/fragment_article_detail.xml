@@ -9,26 +9,32 @@
         android:id="@+id/scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
+    >
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            >
 
             <FrameLayout
                 android:id="@+id/photo_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/photo_placeholder">
+                android:background="@color/photo_placeholder"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                >
                 <!--suppress AndroidLintContentDescription -->
                 <ImageView
                     android:id="@+id/photo"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp" />
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/detail_photo_height" />
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="112dp"
+                    android:layout_height="@dimen/detail_photo_height"
                     android:background="@drawable/photo_background_protection" />
 
             </FrameLayout>
@@ -110,14 +116,13 @@
 
         android:id="@+id/fab"
         android:layout_width="wrap_content"
-
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="48dp"
-        android:elevation="6dp"
+        android:layout_margin="@dimen/fab_margin"
+        android:elevation="@dimen/fab_elevation"
         android:src="@drawable/ic_share"
         app:fabSize="auto"
-        app:pressedTranslationZ="12dp" />
+        app:pressedTranslationZ="@dimen/fab_press_translation_z" />
 
 
 </com.example.xyzreader.ui.DrawInsetsFrameLayout>
