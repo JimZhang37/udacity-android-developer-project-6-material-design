@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.LoaderManager;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,15 +15,20 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowInsets;
+import android.widget.ImageView;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
 import com.example.xyzreader.data.ItemsContract;
+import com.squareup.picasso.Picasso;
 
 /**
  * An activity representing a single Article detail screen, letting you swipe between articles.
@@ -32,7 +38,8 @@ public class ArticleDetailActivity extends AppCompatActivity
 
     private Cursor mCursor;
     private long mStartId;
-
+    private ActionBar ab;
+    private ImageView imageView;
     private long mSelectedItemId;
     private int mSelectedItemUpButtonFloor = Integer.MAX_VALUE;
     private int mTopInset;
@@ -51,27 +58,16 @@ public class ArticleDetailActivity extends AppCompatActivity
                             View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
         }
         setContentView(R.layout.activity_article_detail);
+
         Toolbar myChildToolbar = (Toolbar) findViewById(R.id.my_child_toolbar);
-//        myChildToolbar.setTitle("detail page");
         setSupportActionBar(myChildToolbar);
-        // Get a support ActionBar corresponding to this toolbar
-        ActionBar ab = getSupportActionBar();
-        ab.setTitle("Detail Page");
-        // Enable the Up button
+        ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
+        ab.setDisplayShowTitleEnabled(true);
+        imageView = (ImageView) findViewById(R.id.image_in_appbar);
 
         getLoaderManager().initLoader(0, null, this);
-//add new line
-//        ((CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar)).setTitle("ABC");
-        // my_child_toolbar is defined in the layout file
-//        Toolbar myChildToolbar = (Toolbar) findViewById(R.id.my_child_toolbar);
-//        myChildToolbar.setTitle("detail page");
-//        setSupportActionBar(myChildToolbar);
-        // Get a support ActionBar corresponding to this toolbar
-//        ActionBar ab = getSupportActionBar();
-//        ab.setTitle("Detail Page");
-        // Enable the Up button
-        //ab.setDisplayHomeAsUpEnabled(true);
+
 
         mPagerAdapter = new MyPagerAdapter(getFragmentManager());
         mPager = (ViewPager) findViewById(R.id.pager);
@@ -80,47 +76,6 @@ public class ArticleDetailActivity extends AppCompatActivity
                 .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()));
         mPager.setPageMarginDrawable(new ColorDrawable(0x22000000));
 
-//        mPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-//            @Override
-//            public void onPageScrollStateChanged(int state) {
-//                super.onPageScrollStateChanged(state);
-//                mUpButton.animate()
-//                        .alpha((state == ViewPager.SCROLL_STATE_IDLE) ? 1f : 0f)
-//                        .setDuration(300);
-//            }
-//
-//            @Override
-//            public void onPageSelected(int position) {
-//                if (mCursor != null) {
-//                    mCursor.moveToPosition(position);
-//                }
-//                mSelectedItemId = mCursor.getLong(ArticleLoader.Query._ID);
-//                updateUpButtonPosition();
-//            }
-//        });
-
-//        mUpButtonContainer = findViewById(R.id.up_container);
-
-//        mUpButton = findViewById(R.id.action_up);
-//        mUpButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                onSupportNavigateUp();
-//            }
-//        });
-
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            mUpButtonContainer.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
-//                @Override
-//                public WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
-//                    view.onApplyWindowInsets(windowInsets);
-//                    mTopInset = windowInsets.getSystemWindowInsetTop();
-//                    mUpButtonContainer.setTranslationY(mTopInset);
-//                    updateUpButtonPosition();
-//                    return windowInsets;
-//                }
-//            });
-//        }
 
         if (savedInstanceState == null) {
             if (getIntent() != null && getIntent().getData() != null) {
@@ -148,6 +103,31 @@ public class ArticleDetailActivity extends AppCompatActivity
                 if (mCursor.getLong(ArticleLoader.Query._ID) == mStartId) {
                     final int position = mCursor.getPosition();
                     mPager.setCurrentItem(position, false);
+                    String title = mCursor.getString(ArticleLoader.Query.TITLE);
+                    String image = mCursor.getString(ArticleLoader.Query.PHOTO_URL);
+                    ab.setTitle(title);
+                    Picasso
+                            .get()
+                            .load(image)
+                            .into(imageView);
+
+//                    ImageLoaderHelper.getInstance(this).getImageLoader()
+//                            .get(mCursor.getString(ArticleLoader.Query.PHOTO_URL), new ImageLoader.ImageListener() {
+//                                @Override
+//                                public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
+//                                    Bitmap bitmap = imageContainer.getBitmap();
+//                                    if (bitmap != null) {
+//                                        Palette p = Palette.generate(bitmap, 12);
+//                                        imageView.setImageBitmap(imageContainer.getBitmap());
+//
+//                                    }
+//                                }
+//
+//                                @Override
+//                                public void onErrorResponse(VolleyError volleyError) {
+//
+//                                }
+//                            });
                     break;
                 }
                 mCursor.moveToNext();
@@ -162,17 +142,6 @@ public class ArticleDetailActivity extends AppCompatActivity
         mPagerAdapter.notifyDataSetChanged();
     }
 
-//    public void onUpButtonFloorChanged(long itemId, ArticleDetailFragment fragment) {
-//        if (itemId == mSelectedItemId) {
-//            mSelectedItemUpButtonFloor = fragment.getUpButtonFloor();
-//            updateUpButtonPosition();
-//        }
-//    }
-
-//    private void updateUpButtonPosition() {
-//        int upButtonNormalBottom = mTopInset + mUpButton.getHeight();
-//        mUpButton.setTranslationY(Math.min(mSelectedItemUpButtonFloor - upButtonNormalBottom, 0));
-//    }
 
     private class MyPagerAdapter extends FragmentStatePagerAdapter {
         public MyPagerAdapter(FragmentManager fm) {
@@ -183,10 +152,10 @@ public class ArticleDetailActivity extends AppCompatActivity
         public void setPrimaryItem(ViewGroup container, int position, Object object) {
             super.setPrimaryItem(container, position, object);
             ArticleDetailFragment fragment = (ArticleDetailFragment) object;
-            if (fragment != null) {
-                mSelectedItemUpButtonFloor = fragment.getUpButtonFloor();
-//                updateUpButtonPosition();
-            }
+//            if (fragment != null) {
+//                mSelectedItemUpButtonFloor = fragment.getUpButtonFloor();
+////                updateUpButtonPosition();
+//            }
         }
 
         @Override

@@ -21,7 +21,7 @@ allprojects {
 
     ext {
         androidSupportVersion = "25.3.0"
-
+        picasso_version = "2.71828"
     }
 }
 
