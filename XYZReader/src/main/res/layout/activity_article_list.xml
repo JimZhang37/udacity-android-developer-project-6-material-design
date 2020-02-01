@@ -51,7 +51,8 @@
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/app_name"
                     android:src="@drawable/logo"
-                    app:layout_collapseMode="pin" />
+                    app:layout_collapseMode="pin"
+                    android:scaleType="centerCrop"/>
 
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.CollapsingToolbarLayout>
