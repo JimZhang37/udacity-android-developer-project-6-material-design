@@ -1,9 +1,9 @@
 package com.example.xyzreader.ui;
 
-import android.app.Fragment;
-import android.app.LoaderManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
 import android.content.Intent;
-import android.content.Loader;
+import android.support.v4.content.Loader;
 import android.database.Cursor;
 
 
@@ -103,7 +103,7 @@ public class ArticleDetailFragment extends Fragment implements
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        getLoaderManager().initLoader(0, null, this);
+        getLoaderManager().initLoader(0, null,this);
     }
 
     @Override
@@ -124,7 +124,11 @@ public class ArticleDetailFragment extends Fragment implements
         toolbar = mRootView.findViewById(R.id.my_child_toolbar);
         ((ArticleDetailActivity) getActivity()).setSupportActionBar(toolbar);
         ab = ((ArticleDetailActivity) getActivity()).getSupportActionBar();
+        ab.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         ab.setDisplayHomeAsUpEnabled(true);
+        ab.setDisplayShowHomeEnabled(true);
+
+
 
         mRootView.findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
             @Override
