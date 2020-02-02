@@ -1,9 +1,9 @@
 package com.example.xyzreader.ui;
 
-import android.app.Fragment;
-import android.app.LoaderManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
 import android.content.Intent;
-import android.content.Loader;
+import android.support.v4.content.Loader;
 import android.database.Cursor;
 
 
@@ -28,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 
 import com.android.volley.VolleyError;
@@ -59,13 +60,14 @@ public class ArticleDetailFragment extends Fragment implements
     // Use default locale format
     private SimpleDateFormat outputFormat = new SimpleDateFormat();
     // Most time functions can only handle 1902 - 2037
-    private GregorianCalendar START_OF_EPOCH = new GregorianCalendar(2,1,1);
+    private GregorianCalendar START_OF_EPOCH = new GregorianCalendar(2, 1, 1);
 
     private SubtitleCollapsingToolbarLayout toolbarLayout;
     private ImageView imageView;
     private AdapterRecyclerView adapter;
     private Toolbar toolbar;
     private ActionBar ab;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -108,7 +110,7 @@ public class ArticleDetailFragment extends Fragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
 
 
@@ -123,8 +125,22 @@ public class ArticleDetailFragment extends Fragment implements
         toolbarLayout = mRootView.findViewById(R.id.subtitlecollapsingtoolbarlayout);
         toolbar = mRootView.findViewById(R.id.my_child_toolbar);
         ((ArticleDetailActivity) getActivity()).setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                                                 @Override
+                                                 public void onClick(View v) {
+//                                                     Toast.makeText(getContext(),"your icon was clicked", Toast.LENGTH_SHORT).show();
+                                                     ((ArticleDetailActivity) getActivity()).onBackPressed();
+                                                 }
+                                             }
+        );
+
+
         ab = ((ArticleDetailActivity) getActivity()).getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
+
+//        ab.setDisplayHomeAsUpEnabled(true);
+//        ab.setDisplayShowHomeEnabled(true);
+
 
         mRootView.findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,7 +197,7 @@ public class ArticleDetailFragment extends Fragment implements
 
             } else {
 
-               toolbarLayout.setSubtitle(Html.fromHtml(
+                toolbarLayout.setSubtitle(Html.fromHtml(
                         outputFormat.format(publishedDate) + " by <font color='#ffffff'>"
                                 + mCursor.getString(ArticleLoader.Query.AUTHOR)
                                 + "</font>"));
